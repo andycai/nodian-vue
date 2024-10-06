@@ -27,6 +27,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { onKeyStroke } from '@vueuse/core';
 import FileTree from './FileTree.vue';
 import MarkdownEditor from './MarkdownEditor.vue';
 import { readTextFile, mkdir, exists, writeTextFile } from '@tauri-apps/plugin-fs';
@@ -102,4 +103,12 @@ const closeFile = (file: { path: string; name: string; content: string; isModifi
         }
     }
 };
+
+// 添加快捷键保存功能
+onKeyStroke(['s'], (e) => {
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey) {
+        e.preventDefault();
+        saveFile();
+    }
+}, { target: window });
 </script>
