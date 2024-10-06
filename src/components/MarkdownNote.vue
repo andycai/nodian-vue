@@ -83,7 +83,8 @@ const handleContentChange = (content: string) => {
 const saveFile = async () => {
     if (currentFile.value) {
         try {
-            await writeTextFile(currentFile.value.path, currentFile.value.content);
+            const fullPath = await join(rootDir.value, currentFile.value.path);
+            await writeTextFile(fullPath, currentFile.value.content);
             currentFile.value.isModified = false;
             console.log('File saved:', currentFile.value.path);
         } catch (error) {
