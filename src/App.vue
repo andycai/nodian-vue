@@ -6,12 +6,13 @@
           <li v-for="item in menuItems" :key="item.icon" class="mb-4">
             <router-link :to="item.route"
               class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
-              <i :class="item.icon" class="text-2xl"></i>
+              <component :is="item.icon" class="w-6 h-6" />
             </router-link>
           </li>
         </ul>
         <button @click="toggleDarkMode" class="w-full text-center py-2">
-          <i :class="isDarkMode ? 'fas fa-sun' : 'fas fa-moon'" class="text-2xl"></i>
+          <SunIcon v-if="isDarkMode" class="w-6 h-6 mx-auto text-gray-300" />
+          <MoonIcon v-else class="w-6 h-6 mx-auto text-gray-700" />
         </button>
       </nav>
       <main class="flex-1 overflow-hidden">
@@ -24,9 +25,10 @@
 <script setup lang="ts">
 import { onMounted, watch, provide } from 'vue';
 import { useStorage } from '@vueuse/core';
+import { DocumentTextIcon, SunIcon, MoonIcon } from '@heroicons/vue/24/solid';
 
 const menuItems = [
-  { icon: 'fas fa-file-alt', route: '/' },
+  { icon: DocumentTextIcon, route: '/' },
   // Add more menu items for other features later
 ];
 

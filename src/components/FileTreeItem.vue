@@ -2,8 +2,7 @@
     <li>
         <div @click="toggleFolder"
             class="flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 p-1 rounded">
-            <i :class="item.isDirectory ? 'fas fa-folder text-yellow-500' : 'fas fa-file text-blue-500'"
-                class="mr-2"></i>
+            <component :is="getIcon" class="w-5 h-5 mr-2" :class="getIconColor" />
             {{ item.name }}
         </div>
         <ul v-if="item.isDirectory && item.isOpen" class="ml-4">
@@ -14,7 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue';
+import { computed } from 'vue';
+import { FolderIcon, DocumentIcon, DocumentTextIcon } from '@heroicons/vue/24/outline';
 
 interface TreeItem {
     name: string;
@@ -40,4 +40,24 @@ const toggleFolder = () => {
         emit('file-selected', props.item.path);
     }
 };
+
+const getIcon = computed(() => {
+    if (props.item.isDirectory) {
+        return FolderIcon;
+    } else if (props.item.name.endsWith('.md')) {
+        return DocumentTextIcon;
+    } else {
+        return DocumentIcon;
+    }
+});
+
+const getIconColor = computed(() => {
+    if (props.item.isDirectory) {
+        return 'text-yellow-500';
+    } else if (props.item.name.endsWith('.md')) {
+        return 'text-blue-500';
+    } else {
+        return 'text-gray-500';
+    }
+});
 </script>
