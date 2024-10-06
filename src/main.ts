@@ -1,4 +1,10 @@
-import { createApp } from "vue";
-import App from "./App.vue";
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+import './styles/main.css'
 
-createApp(App).mount("#app");
+const app = createApp(App)
+app.use(router)
+app.mount('#app')
+
+console.log('App mounted') // 添加这行来确认应用已挂载
