@@ -5,10 +5,15 @@
         </div>
         <div class="w-3/4 flex flex-col">
             <div class="flex border-b">
-                <div v-for="file in openFiles" :key="file.path" class="px-4 py-2 cursor-pointer"
-                    :class="{ 'bg-gray-200': file.path === currentFile?.path }" @click="switchFile(file)">
-                    {{ file.name }}
-                    <span v-if="file.isModified">*</span>
+                <div v-for="file in openFiles" :key="file.path" class="px-4 py-2 cursor-pointer flex items-center"
+                    :class="{ 'bg-gray-200': file.path === currentFile?.path }">
+                    <span @click="switchFile(file)">
+                        {{ file.name }}
+                        <span v-if="file.isModified">*</span>
+                    </span>
+                    <button @click="closeFile(file)" class="ml-2 text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
             </div>
             <MarkdownEditor v-if="currentFile" :file="currentFile" @content-changed="handleContentChange"
@@ -49,7 +54,6 @@ onMounted(async () => {
 const openFile = async (filePath: string) => {
     try {
         const fullPath = await join(rootDir.value, filePath);
-        // console.error("file path:", fullPath);
         const content = await readTextFile(fullPath);
         const name = await basename(filePath);
         const file = { path: filePath, name, content, isModified: false };
@@ -60,7 +64,6 @@ const openFile = async (filePath: string) => {
             openFiles.value.push(file);
         }
         currentFile.value = file;
-        // console.log('Opened file:', file);
     } catch (error) {
         console.error('Error opening file:', error);
     }
@@ -85,6 +88,16 @@ const saveFile = async () => {
             console.log('File saved:', currentFile.value.path);
         } catch (error) {
             console.error('Error saving file:', error);
+        }
+    }
+};
+
+const closeFile = (file: { path: string; name: string; content: string; isModified: boolean }) => {
+    const index = openFiles.value.findIndex(f => f.path === file.path);
+    if (index !== -1) {
+        openFiles.value.splice(index, 1);
+        if (currentFile.value && currentFile.value.path === file.path) {
+            currentFile.value = openFiles.value.length > 0 ? openFiles.value[0] : null;
         }
     }
 };
