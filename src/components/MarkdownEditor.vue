@@ -1,15 +1,17 @@
 <template>
-    <div class="flex flex-col h-full">
-        <div class="flex justify-end p-2">
-            <button @click="saveFile" class="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+    <div class="flex flex-col h-full bg-white dark:bg-gray-900 text-black dark:text-white">
+        <div class="flex justify-end p-2 border-b border-gray-200 dark:border-gray-700">
+            <button @click="saveFile"
+                class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700">Save</button>
         </div>
         <div class="flex flex-1">
             <div class="w-1/2 p-4">
-                <textarea v-model="content" @input="handleInput" class="w-full h-full p-2 border rounded"
+                <textarea v-model="content" @input="handleInput"
+                    class="w-full h-full p-2 border rounded bg-white dark:bg-gray-800 text-black dark:text-white border-gray-300 dark:border-gray-600"
                     placeholder="Enter your Markdown here..."></textarea>
             </div>
             <div class="w-1/2 p-4">
-                <div v-html="renderedContent" class="markdown-body"></div>
+                <div v-html="renderedContent" class="markdown-body dark:markdown-body-dark"></div>
             </div>
         </div>
     </div>
@@ -56,12 +58,18 @@ const renderedContent = computed(() => {
 
 <style>
 @import 'highlight.js/styles/github.css';
+@import 'highlight.js/styles/github-dark.css';
 
 .markdown-body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
     font-size: 16px;
     line-height: 1.5;
     word-wrap: break-word;
+}
+
+.dark .markdown-body-dark {
+    color: #c9d1d9;
+    background-color: #0d1117;
 }
 
 .markdown-body h1,

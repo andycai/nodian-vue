@@ -1,17 +1,18 @@
 <template>
-    <div class="flex h-full">
-        <div class="w-1/4 border-r">
+    <div class="flex h-full bg-white dark:bg-gray-900 text-black dark:text-white">
+        <div class="w-1/4 border-r border-gray-200 dark:border-gray-700">
             <FileTree :root="rootDir" @file-selected="openFile" />
         </div>
         <div class="w-3/4 flex flex-col">
-            <div class="flex border-b">
+            <div class="flex border-b border-gray-200 dark:border-gray-700">
                 <div v-for="file in openFiles" :key="file.path" class="px-4 py-2 cursor-pointer flex items-center"
-                    :class="{ 'bg-gray-200': file.path === currentFile?.path }">
+                    :class="{ 'bg-gray-200 dark:bg-gray-700': file.path === currentFile?.path }">
                     <span @click="switchFile(file)">
                         {{ file.name }}
                         <span v-if="file.isModified">*</span>
                     </span>
-                    <button @click="closeFile(file)" class="ml-2 text-gray-500 hover:text-gray-700">
+                    <button @click="closeFile(file)"
+                        class="ml-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>

@@ -1,8 +1,10 @@
 <template>
-    <div class="p-4">
+    <div class="p-4 bg-white dark:bg-gray-900 text-black dark:text-white">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-semibold">Files</h2>
-            <button @click="createNewFile" class="px-2 py-1 bg-blue-500 text-white rounded">New File</button>
+            <button @click="createNewFile"
+                class="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700">New
+                File</button>
         </div>
         <ul v-if="treeItems.length">
             <FileTreeItem v-for="item in sortedTreeItems" :key="item.path" :item="item" :root="root"

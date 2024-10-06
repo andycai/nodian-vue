@@ -1,7 +1,9 @@
 <template>
     <li>
-        <div @click="toggleFolder" class="flex items-center cursor-pointer">
-            <i :class="item.isDirectory ? 'fas fa-folder' : 'fas fa-file'" class="mr-2"></i>
+        <div @click="toggleFolder"
+            class="flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 p-1 rounded">
+            <i :class="item.isDirectory ? 'fas fa-folder text-yellow-500' : 'fas fa-file text-blue-500'"
+                class="mr-2"></i>
             {{ item.name }}
         </div>
         <ul v-if="item.isDirectory && item.isOpen" class="ml-4">
