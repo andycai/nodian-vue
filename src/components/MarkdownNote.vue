@@ -27,12 +27,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import { onKeyStroke } from '@vueuse/core';
 import FileTree from './FileTree.vue';
 import MarkdownEditor from './MarkdownEditor.vue';
 import { readTextFile, mkdir, exists, writeTextFile } from '@tauri-apps/plugin-fs';
 import { appDataDir, join, basename, homeDir } from '@tauri-apps/api/path';
+
+// Inject isDarkMode
+const isDarkMode = inject('isDarkMode');
 
 const rootDir = ref('');
 const openFiles = ref<Array<{ path: string; name: string; content: string; isModified: boolean }>>([]);

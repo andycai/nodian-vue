@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import { onMounted, watch, provide } from 'vue';
 import { useStorage } from '@vueuse/core';
 
 const menuItems = [
@@ -36,20 +36,25 @@ const toggleDarkMode = () => {
   isDarkMode.value = !isDarkMode.value;
 };
 
-watch(isDarkMode, (newValue) => {
-  if (newValue) {
+const applyDarkMode = (value: boolean) => {
+  if (value) {
     document.documentElement.classList.add('dark');
   } else {
     document.documentElement.classList.remove('dark');
   }
+};
+
+watch(isDarkMode, (newValue) => {
+  applyDarkMode(newValue);
 });
 
 onMounted(() => {
   console.log('App component mounted');
-  if (isDarkMode.value) {
-    document.documentElement.classList.add('dark');
-  }
+  applyDarkMode(isDarkMode.value);
 });
+
+// Provide isDarkMode to all child components
+provide('isDarkMode', isDarkMode);
 </script>
 
 <style>
