@@ -5,7 +5,7 @@
             <button @click="createNewFile" class="px-2 py-1 bg-blue-500 text-white rounded">New File</button>
         </div>
         <ul v-if="treeItems.length">
-            <FileTreeItem v-for="item in treeItems" :key="item.path" :item="item" :root="root"
+            <FileTreeItem v-for="item in sortedTreeItems" :key="item.path" :item="item" :root="root"
                 @file-selected="$emit('file-selected', $event)" />
         </ul>
         <div v-else>No files found.</div>
@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { readDir, writeTextFile } from '@tauri-apps/plugin-fs';
 import { join } from '@tauri-apps/api/path';
 import FileTreeItem from './FileTreeItem.vue';
@@ -36,6 +36,21 @@ interface TreeItem {
 
 const treeItems = ref<TreeItem[]>([]);
 
+const sortTreeItems = (items: TreeItem[]): TreeItem[] => {
+    return items.sort((a, b) => {
+        if (a.isDirectory && !b.isDirectory) return -1;
+        if (!a.isDirectory && b.isDirectory) return 1;
+        return a.name.localeCompare(b.name);
+    }).map(item => {
+        if (item.children) {
+            item.children = sortTreeItems(item.children);
+        }
+        return item;
+    });
+};
+
+const sortedTreeItems = computed(() => sortTreeItems(treeItems.value));
+
 const loadTreeItems = async (dir: string): Promise<TreeItem[]> => {
     try {
         const fullPath = await join(props.root, dir);
@@ -55,12 +70,11 @@ const loadTreeItems = async (dir: string): Promise<TreeItem[]> => {
                 item.children = await loadTreeItems(subPath);
             }
             item.path = subPath;
-            // console.error('item.path: ', item.path);
 
             items.push(item);
         }
 
-        return items;
+        return sortTreeItems(items);
     } catch (error) {
         console.error('Error loading tree items:', error);
         return [];
